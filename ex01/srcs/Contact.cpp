@@ -3,57 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   Contact.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryabuki <ryabuki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yabukirento <yabukirento@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 17:07:04 by ryabuki           #+#    #+#             */
-/*   Updated: 2025/04/22 18:49:23 by ryabuki          ###   ########.fr       */
+/*   Updated: 2025/04/24 15:16:14 by yabukirento      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Contact.hpp"
 
-Contact::Contact(void)
-{
-	this->_first_name = "";
-	this->_last_name = "";
-	this->_nick_name = "";
-	this->_phone_number = "";
-	this->_darkest_secret = "";
+Contact::Contact(void) {}
+
+Contact::~Contact(void) {}
+
+Contact::Contact(const Contact& other) {
+	for (int i = 0; i < FIELD_COUNT; ++i) {
+		this->contact_fields[i] = other.contact_fields[i];
+	}
 }
 
-Contact::~Contact(void)
-{
-	return ;
+Contact& Contact::operator=(const Contact& rhs) {
+	if (this != &rhs) {
+		for (int i = 0; i < FIELD_COUNT; ++i) {
+			this->contact_fields[i] = rhs.contact_fields[i];
+		}
+	}
+	return (*this);
 }
 
-void Contact::ft_set_firstname(const std::string& str)
+void Contact::ft_create_contact_from_input()
 {
-	this->_first_name = str;
+	static const std::string prompts[FIELD_COUNT] = {
+		"First name", "Last name", "Nickname", "Phone number", "Darkest secret"
+	};
+
+	std::string input;
+	for (int i = 0; i < FIELD_COUNT; ++i)
+	{
+		do {
+			std::cout << prompts[i] << ": ";
+			if (!std::getline(std::cin, input)) {
+				std::cerr << "Input error. Aborting." << std::endl;
+				return;
+			}
+		} while (input.empty());
+
+		contact_fields[i] = input;
+	}
 }
 
-void Contact::ft_set_lastname(const std::string& str)
+std::string Contact::ft_get_field(int field) const
 {
-	this->_last_name = str;
-}
-
-void Contact::ft_set_phonenumber(const std::string& str)
-{
-	this->_phone_number = str;
-}
-
-void Contact::ft_set_darksetsecret(const std::string& str)
-{
-	this->_darkest_secret = str;
-}
-
-void	Contact::ft_create_contact_from_input()
-{
-	Contact		new_contact;
-	std::string	input;
-
-	std::cout << "First name: ";
-	std::getline(std::cin, input);
-	new_contact.ft_set_firstname(input);
+	if (field >= 0 && field < FIELD_COUNT)
+		return contact_fields[field];
+	else
+		return ("");
 }
 
 std::string	Contact::ft_print_format(std::string str)
@@ -64,11 +68,14 @@ std::string	Contact::ft_print_format(std::string str)
 		return (str);
 }
 
-void	Contact::ft_get_contact(int index)
+void Contact::ft_get_contact(int index)
 {
-	std::cout << "|";
-	std::cout << std::setw(10) << index << "|";
-	std::cout << std::setw(10) << ft_print_format(this->_first_name) << "|";
-	std::cout << std::setw(10) << ft_print_format(this->_last_name) << "|";
-	std::cout << std::setw(10) << ft_print_format(this->_nick_name) << "|";
+	std::cout << "|" << std::setw(10) << index << "|";
+
+	for (int i = FIRST_NAME; i <= NICK_NAME; ++i)
+	{
+		std::cout << std::setw(10) << ft_print_format(contact_fields[i]) << "|";
+	}
+	std::cout << std::endl;
 }
+

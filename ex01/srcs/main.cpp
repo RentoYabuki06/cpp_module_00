@@ -3,41 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ryabuki <ryabuki@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yabukirento <yabukirento@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 16:51:09 by ryabuki           #+#    #+#             */
-/*   Updated: 2025/04/22 17:25:34 by ryabuki          ###   ########.fr       */
+/*   Updated: 2025/04/24 15:01:12 by yabukirento      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PhoneBook.hpp"
 #include "Contact.hpp"
-#include <iostream>
 
 int	main(void)
 {
-	PhoneBook	PhoneBook;
+	PhoneBook	phoneBook;
 	std::string	input;
 
 	while (1)
 	{
 		std::cout << "Enter command : [ADD, SEARCH, EXIT]" << std::endl;
-		std::getline(std::cin, input);
+		if (!std::getline(std::cin, input))
+			break ;
 		if (input == "ADD")
 		{
-
+			phoneBook.ft_add_phonebook();
 		}
 		else if (input == "SEARCH")
 		{
-			
+			phoneBook.ft_get_phonebook();
 		}
 		else if (input == "EXIT")
 		{
-			
+			break ;
 		}
 		else
 		{
 			std::cout << "input is invalid!" << std::endl;
 		}
 	}
+	return (EXIT_SUCCESS);
 }
